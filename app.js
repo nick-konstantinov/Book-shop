@@ -44,14 +44,14 @@ function createFrameElem() {
     const headerTextElem = createElem(headerInnerElem, 'div', 'header__text', '');
     const headerTitleElem = createElem(headerTextElem, 'h1', 'header__title', 'Welcome to Book-shop');
 
-    const headerBasketElem = createElem(headerInnerElem, 'div', 'header__bag', '');
+    const headerCartElem = createElem(headerInnerElem, 'div', 'header__cart', '');
 
-    const btnBasket = createElem(headerBasketElem, 'button', '', '');
-    btnBasket.setAttribute('type', 'button');
+    const btnCart = createElem(headerCartElem, 'button', '', '');
+    btnCart.setAttribute('type', 'button');
 
-    const basketLogoElem = createElem(btnBasket, 'img', 'header__logo', '');
-    basketLogoElem.setAttribute('src', 'assets/icons/basket.svg');
-    basketLogoElem.setAttribute('alt', 'basket');
+    const cartLogoElem = createElem(btnCart, 'img', 'header__logo', '');
+    cartLogoElem.setAttribute('src', 'assets/icons/cart.svg');
+    cartLogoElem.setAttribute('alt', 'shopping-cart');
 
     // Main
     const catalogElem = createElem(fragment, 'main', 'catalog', '');

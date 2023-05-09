@@ -87,28 +87,28 @@ body{
     color: #091d36;
 }
 
-.header__bag {
+.header__cart {
     position: relative;
     top: -0.6rem;
     width: 5%;
     height: 4rem;
 }
 
-.header__bag button {
+.header__cart button {
     height: 100%;
     background-color: transparent;
     border: 0;
     /* outline-style: none; */
 }
 
-.header__bag button img {
+.header__cart button img {
     width: 5rem;
     height: 5rem;
 
     transition: all ease 0.2s;
 }
 
-.header__bag button img:hover {
+.header__cart button img:hover {
     cursor: pointer;
     transform: scale(1.2);
 }
