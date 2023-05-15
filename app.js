@@ -12,6 +12,13 @@ let books = await response.json();
 // Add id atributes for books
 let booksWithId = books.map((item, i) => ({...item, id: i + 1}));
 
+let bookCatalogMap = new Map();
+
+for (let i = 0; i < booksWithId.length; i++) {
+    bookCatalogMap.set(booksWithId[i].id, booksWithId[i]);
+}
+
+
 // Create element
 function createElem(parentElem, tagName, className = '', textContent) {
     const newElem = document.createElement(tagName);
@@ -103,6 +110,7 @@ function createBooksELem(arr) {
         const bookElem = document.createElement('div');
         bookElem.classList.add('book');
         bookElem.setAttribute('id', i + 1);
+        bookElem.dataset.price = arr[i].price;
 
         const bookCoverElem = createElem(bookElem, 'div', 'book__cover', '');
         const imgCoverElem = createElem(bookCoverElem, 'img', '', '');
@@ -171,6 +179,10 @@ createBooksELem(booksWithId);
 createMaskElem();
 createModalInfoElem();
 drawModalWindow();
+// Add shopping cart counter and cart menu
+createCartMenu();
+createShopingCartCounter()
+
 
 // Popup
 
@@ -224,6 +236,7 @@ function fillModalContent(map, key) {
 const maskElem = document.querySelector('.mask');
 const modalInfoElem = document.querySelector('.modal-info');
 const modalCrossElem = document.querySelector('.modal-info__cross');
+const cartMenuElem = document.querySelector('.cart-menu');
 
 // Add listener for cross to close modal window
 if (modalCrossElem) {
@@ -258,10 +271,196 @@ if (maskElem) {
         if (modalInfoElem) {
             modalInfoElem.hidden = true;
             maskElem.hidden = true;
+            cartMenuElem.classList.remove('open');
             body.classList.remove("noscroll");
         }
     });
 }
 
+// Shopping cart
+
+// Initial cart's amount variable and order collection
+let sumOrder = 0;
+let orderMap = new Map();
+
+// Add elements to map collection
+function addElemToMap(elem) {
+    let countBooks = orderMap.get(elem);
+    if (isNaN(countBooks)) {
+        countBooks = 0;
+    }
+
+    ++countBooks;
+    sumOrder += +elem.dataset.price;
+
+    orderMap.set(elem, countBooks);
+}
+
+// Create cart menu
+function createCartMenu() {
+    const cartMenuElem = createElem(body, 'div', 'cart-menu', '');
+    const cartMenuInnerElem = createElem(cartMenuElem, 'div', 'cart-menu__inner', '');
+    const cartBtnAndAmountOrderElem = createElem(cartMenuElem, 'div', 'cart-menu__inter', '');
+    const cartBtnOrderElem = createElem(cartBtnAndAmountOrderElem, 'button', 'cart-menu__btn', 'Order');
+    const cartAmountOrderElem = createElem(cartBtnAndAmountOrderElem, 'div', 'cart-menu__amount', '');
+
+
+    let widthWidow = document.documentElement.clientWidth;
+
+    if (widthWidow < 1650) return;
+
+    const cartBtn = document.querySelector('.header__cart button');
+    let coordsCartBtn = getCoords(cartBtn);
+
+    cartMenuElem.style.left = coordsCartBtn.left + 'px';
+}
+
+// Create cart menu item
+function createCartMenuItem(key) {
+    let book = bookCatalogMap.get(key);
+
+    const cartMenuInnerElem = document.querySelector('.cart-menu__inner');
+
+    const cartMenuItemELem = document.createElement('div');
+    cartMenuItemELem.classList.add('cart-menu__item');
+    cartMenuItemELem.dataset.price = book.price;
+
+    const cartMenuCoverELem = createElem(cartMenuItemELem, 'div', 'cart-menu__cover', '');
+    const cartMenuImgELem = createElem(cartMenuCoverELem, 'img', 'cart-menu__cover', '');
+    cartMenuImgELem.setAttribute('src', book.imageLink);
+    cartMenuImgELem.setAttribute('alt', book.author);
+
+    const cartMenuInfoElem = createElem(cartMenuItemELem, 'div', 'cart-menu__info', '');
+    const cartMenuAuthorElem = createElem(cartMenuInfoElem, 'h4', 'cart-menu__author', book.author);
+
+    let title = '';
+        if (book.title.length > 42) {
+           title = book.title.slice(0, 38) + '...'
+        } else {
+            title = book.title;
+        }
+
+    const cartMenuTitleElem = createElem(cartMenuInfoElem, 'h3', 'cart-menu__title', title);
+    const cartMenuPriceElem = createElem(cartMenuInfoElem, 'h4', 'cart-menu__price', 'Price: $' + book.price);
+
+    const cartMenuBtnCrossElem = createElem(cartMenuItemELem, 'button', 'cart-menu__cross', '');
+    cartMenuBtnCrossElem.setAttribute('type', 'button');
+    const cartMenuImgCrossElem = createElem(cartMenuBtnCrossElem, 'img', '', '');
+    cartMenuImgCrossElem.setAttribute('src', 'assets/icons/cross.svg');
+    cartMenuImgCrossElem.setAttribute('alt', 'cross');
+
+    cartMenuInnerElem.append(cartMenuItemELem);
+}
+
+// Get element's coords
+function getCoords(elem) {
+    let box = elem.getBoundingClientRect();
+    return {
+      top: box.top + window.pageYOffset,
+      right: box.right + window.pageXOffset,
+      bottom: box.bottom + window.pageYOffset,
+      left: box.left + window.pageXOffset
+    };
+}
+
+// Initial cart's counter variable
+let counterCart = 0;
+
+// Create shopping cart counter
+function createShopingCartCounter() {
+    const cart = document.querySelector('.header__cart button');
+    const counterShoppingCart = createElem(cart, 'div', 'header__cart-counter', '');
+    const quantityBooksElem = createElem(counterShoppingCart, 'h5', 'header__cart-counter_quantity', '');
+    counterShoppingCart.hidden = true;
+}
+
+// Change shopping cart counter
+function changeCartCounter() {
+    const counterShoppingCart = document.querySelector('.header__cart-counter');
+    let quantityBooksElem = document.querySelector('.header__cart-counter_quantity');
+
+    quantityBooksElem.innerHTML = --counterCart;
+    if (counterCart > 0) {
+        counterShoppingCart.classList.add('active');
+    } else {
+        counterShoppingCart.classList.remove('active');
+        counterShoppingCart.hidden = true;
+        cartMenuElem.classList.remove('open');
+        maskElem.hidden = !maskElem.hidden;
+        body.classList.remove("noscroll");
+    }
+}
+
+// Add listener for cart's button when cart's counter not equal "0" to open cart menu
+const btnCart = document.querySelector('.header__cart button');
+btnCart.addEventListener('click', function() {
+    if (counterCart === 0) return;
+    const cartMenuElem = document.querySelector('.cart-menu');
+    cartMenuElem.classList.toggle('open');
+    maskElem.hidden = !maskElem.hidden;
+    body.classList.toggle("noscroll");
+});
+
+// Add listener for window to correct position cart menu
+window.addEventListener('resize', function() {
+    const cartMenuElem = this.document.querySelector('.cart-menu');
+    let widthWidow = document.documentElement.clientWidth;
+
+    const cartBtn = document.querySelector('.header__cart button');
+    let coordsCartBtn = getCoords(cartBtn);
+
+    if (widthWidow < 1665) {
+        cartMenuElem.style.left = widthWidow - 338 + 'px';
+
+    } else {
+        cartMenuElem.style.left = coordsCartBtn.left + 'px';
+    }
+});
+
+// Add listener for catalog shelf when happened 'click' on order button
+// Do:
+// Add book's elements to "order map"
+// Create and append book's elements to cart menu
+// Show shopping cart's counter and change сontent
+const catalogElem = document.querySelector('.catalog__shelf');
+catalogElem.addEventListener('click', function(event) {
+    let bookElem = event.target.closest('.book');
+    let btnOrder = event.target.closest('.btn-order');
+    const counterShoppingCart = document.querySelector('.header__cart-counter');
+    let quantityBooksElem = document.querySelector('.header__cart-counter_quantity');
+    let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
+
+        if (!btnOrder) return;
+
+        if (!catalogElem.contains(btnOrder)) return;
+
+        addElemToMap(bookElem);
+
+        createCartMenuItem(+bookElem.id);
+        counterShoppingCart.hidden = false;
+        counterShoppingCart.classList.add('active');
+        quantityBooksElem.innerHTML = ++counterCart;
+        cartAmountOrderElem.innerHTML = '$' + sumOrder;
+});
+
+
+
+// Add listener for cart menu when happened 'click' on cross book's elements
+// Do: remove book's elements and reduce counter's content
+cartMenuElem.addEventListener('click', function(event) {
+    let cross = event.target.closest('.cart-menu__cross');
+    let item = event.target.closest('.cart-menu__item');
+    let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
+
+        if (!cross) return;
+
+        if (!cartMenuElem.contains(cross)) return;
+
+        sumOrder -= +item.dataset.price;
+
+        item.remove();
+        changeCartCounter();
+        cartAmountOrderElem.innerHTML = '$' + sumOrder;
+});
 
 })();
