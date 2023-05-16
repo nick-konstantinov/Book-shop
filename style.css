@@ -46,7 +46,7 @@ body{
     position: sticky;
     top: 0;
     z-index: 5;
-    width: 100%;
+    width: auto;
     height: 8rem;
     background-color: #90AFC5;
     padding-top: 1.5rem;
@@ -334,9 +334,11 @@ body{
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #fff;
-    will-change: transform;
 
-    transition: all ease 0.2s;
+    cursor: grab;
+
+    will-change: transform;
+    transition: transform ease 0.2s, box-shadow ease 0.2s;
 }
 
 .book:hover {

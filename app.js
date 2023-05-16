@@ -206,7 +206,7 @@ function drawModalWindow() {
 
         maskElem.hidden = !maskElem.hidden;
         modalInfoElem.hidden = !modalInfoElem.hidden;
-        body.classList.toggle("noscroll");
+        body.style.overflow = 'hidden';
         fillModalContent(mapBooks, bookElem.id);
     });
 }
@@ -243,7 +243,7 @@ if (modalCrossElem) {
     modalCrossElem.addEventListener('click', function() {
         modalInfoElem.hidden = !modalInfoElem.hidden;
         maskElem.hidden = !maskElem.hidden;
-        body.classList.remove("noscroll");
+        body.style.overflow = 'visible';
     });
 }
 
@@ -272,7 +272,7 @@ if (maskElem) {
             modalInfoElem.hidden = true;
             maskElem.hidden = true;
             cartMenuElem.classList.remove('open');
-            body.classList.remove("noscroll");
+            body.style.overflow = 'visible';
         }
     });
 }
@@ -285,7 +285,8 @@ let orderMap = new Map();
 
 // Add elements to map collection
 function addElemToMap(elem) {
-    let countBooks = orderMap.get(elem);
+    const id = elem.getAttribute('id');
+    let countBooks = orderMap.get(id);
     if (isNaN(countBooks)) {
         countBooks = 0;
     }
@@ -293,7 +294,7 @@ function addElemToMap(elem) {
     ++countBooks;
     sumOrder += +elem.dataset.price;
 
-    orderMap.set(elem, countBooks);
+    orderMap.set(id, countBooks);
 }
 
 // Create cart menu
@@ -322,6 +323,7 @@ function createCartMenuItem(key) {
     const cartMenuInnerElem = document.querySelector('.cart-menu__inner');
 
     const cartMenuItemELem = document.createElement('div');
+    cartMenuItemELem.dataset.id = key;
     cartMenuItemELem.classList.add('cart-menu__item');
     cartMenuItemELem.dataset.price = book.price;
 
@@ -396,9 +398,16 @@ const btnCart = document.querySelector('.header__cart button');
 btnCart.addEventListener('click', function() {
     if (counterCart === 0) return;
     const cartMenuElem = document.querySelector('.cart-menu');
+    modalInfoElem.hidden = true;
+
     cartMenuElem.classList.toggle('open');
-    maskElem.hidden = !maskElem.hidden;
-    body.classList.toggle("noscroll");
+    if (cartMenuElem.classList.contains('open')) {
+        maskElem.hidden = false;
+        body.style.overflow = 'hidden';
+    } else {
+        maskElem.hidden = true;
+        body.style.overflow = 'visible';
+    }
 });
 
 // Add listener for window to correct position cart menu
@@ -423,24 +432,24 @@ window.addEventListener('resize', function() {
 // Create and append book's elements to cart menu
 // Show shopping cart's counter and change сontent
 const catalogElem = document.querySelector('.catalog__shelf');
-catalogElem.addEventListener('click', function(event) {
+catalogElem.addEventListener('click', function (event) {
     let bookElem = event.target.closest('.book');
     let btnOrder = event.target.closest('.btn-order');
     const counterShoppingCart = document.querySelector('.header__cart-counter');
     let quantityBooksElem = document.querySelector('.header__cart-counter_quantity');
     let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
 
-        if (!btnOrder) return;
+    if (!btnOrder) return;
 
-        if (!catalogElem.contains(btnOrder)) return;
+    if (!catalogElem.contains(btnOrder)) return;
 
-        addElemToMap(bookElem);
+    addElemToMap(bookElem);
 
-        createCartMenuItem(+bookElem.id);
-        counterShoppingCart.hidden = false;
-        counterShoppingCart.classList.add('active');
-        quantityBooksElem.innerHTML = ++counterCart;
-        cartAmountOrderElem.innerHTML = '$' + sumOrder;
+    createCartMenuItem(+bookElem.id);
+    counterShoppingCart.hidden = false;
+    counterShoppingCart.classList.add('active');
+    quantityBooksElem.innerHTML = ++counterCart;
+    cartAmountOrderElem.innerHTML = '$' + sumOrder;
 });
 
 
@@ -451,6 +460,7 @@ cartMenuElem.addEventListener('click', function(event) {
     let cross = event.target.closest('.cart-menu__cross');
     let item = event.target.closest('.cart-menu__item');
     let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
+    const id = item.dataset.id;
 
         if (!cross) return;
 
@@ -459,8 +469,126 @@ cartMenuElem.addEventListener('click', function(event) {
         sumOrder -= +item.dataset.price;
 
         item.remove();
+        const currentCount = orderMap.get(id);
+        const newCount = currentCount - 1;
+        if (newCount === 0) {
+            orderMap.delete(id);
+        } else {
+            orderMap.set(id, newCount);
+        }
+
+        item = null;
+
         changeCartCounter();
         cartAmountOrderElem.innerHTML = '$' + sumOrder;
+        if (counterCart === 0) {
+            body.style.overflow = 'visible';
+        }
 });
+
+
+// Drag'n'Drop
+
+// Target for drag'n'drop
+let currentDroppable = null;
+let target = false;
+
+// Add listener for book's elements
+catalogElem.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    let bookElem = event.target.closest('.book');
+
+    if (!bookElem) return;
+
+    let cloneBookElem = document.createElement('img');
+    cloneBookElem.setAttribute('src', bookElem.querySelector('img').getAttribute('src'));
+    cloneBookElem.style.position = 'absolute';
+    cloneBookElem.style.width = '100px';
+    cloneBookElem.style.height = 'auto';
+    cloneBookElem.style.cursor = 'grab';
+
+    document.body.append(cloneBookElem);
+    cloneBookElem.style.zIndex = 1000;
+
+    function moveAt(pageX, pageY) {
+        cloneBookElem.style.left = pageX - 50 + 'px';
+        cloneBookElem.style.top = pageY - cloneBookElem.offsetHeight / 2 + 'px';
+    }
+
+    function onMouseMove(e) {
+        moveAt(e.pageX, e.pageY);
+
+        cloneBookElem.hidden = true;
+        let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        cloneBookElem.hidden = false;
+
+        if (!elemBelow) return;
+
+        let droppableBelow = elemBelow.closest('.header__cart button');
+        if (currentDroppable != droppableBelow) {
+            if (currentDroppable) {
+                leaveDroppable(currentDroppable);
+                cloneBookElem.style.opacity = 1;
+                cloneBookElem.style.cursor = 'grab';
+
+                target = false;
+            }
+            currentDroppable = droppableBelow;
+            if (currentDroppable) {
+                enterDroppable(currentDroppable);
+                cloneBookElem.style.opacity = 0.2;
+                cloneBookElem.style.cursor = 'crosshair';
+
+                target = true;
+            }
+        }
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    document.addEventListener('mouseup', function() {
+        const counterShoppingCart = document.querySelector('.header__cart-counter');
+        const btnCart = document.querySelector('.header__cart button');
+        let quantityBooksElem = document.querySelector('.header__cart-counter_quantity');
+        let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
+        let bookElem = event.target.closest('.book');
+
+        document.removeEventListener('mousemove', onMouseMove);
+
+        if (cloneBookElem) {
+            if (target) {
+                addElemToMap(bookElem);
+                createCartMenuItem(+bookElem.id);
+                counterShoppingCart.hidden = false;
+                counterShoppingCart.classList.add('active');
+                quantityBooksElem.innerHTML = ++counterCart;
+                cartAmountOrderElem.innerHTML = '$' + sumOrder;
+
+                cloneBookElem.remove();
+                cloneBookElem = null;
+                target = false;
+                leaveDroppable(btnCart);
+            } else {
+                cloneBookElem.remove();
+                cloneBookElem = null;
+            }
+        }
+
+    });
+
+    cloneBookElem.ondragstart = function() {
+        return false;
+    };
+
+});
+
+function leaveDroppable(elem) {
+    elem.style.transform = 'scale(1)';
+}
+
+function enterDroppable(elem) {
+    elem.style.transform = 'scale(1.2)';
+}
+
 
 })();
