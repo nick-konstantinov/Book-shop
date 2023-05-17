@@ -157,7 +157,7 @@ body{
 
     overflow-y: auto;
 
-    transform: translateY(-100%);
+    transform: translateY(-105%);
     transition: transform 0.2s;
 }
 
@@ -482,7 +482,6 @@ img {
 /* Modal-Info */
 
 .modal-info {
-    position: relative;
     background: #FAFAFA;
     border-radius: 0.9rem;
 
@@ -604,4 +603,159 @@ img {
 
 .modal-info__cross::after {
     transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Media */
+
+@media (max-width: 1000px) {
+
+    /* Modal-Info */
+
+    .modal-info__inner {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal-info__cover {
+        display: none;
+    }
+
+    .modal-info__info {
+        width: 100%;
+        height: 50rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        padding-right: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 0 15px;
+    }
+
+    /* Header */
+
+    .header {
+        height: 8rem;
+    }
+
+    .header__logo {
+        width: 20%;
+    }
+
+    .header__logo img {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .header__cart button img {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .header__title {
+        font-size: 2.2rem;
+    }
+
+    .header__text {
+        width: 60%;
+        text-align: center;
+    }
+
+    .header__cart {
+        width: 20%;
+        display: flex;
+        justify-content: right;
+    }
+
+    /* Main */
+
+    .catalog__inner {
+        padding: 2rem 0;
+    }
+
+    .catalog__title {
+        font-size: 2.2rem;
+    }
+
+    .catalog__shelf {
+        margin-top: 1rem;
+    }
+
+    .book  {
+        width: 25rem;
+        height: auto;
+        flex-wrap: wrap;
+
+        overflow-y: visible;
+        overflow-x: visible;
+    }
+
+    .book__cover {
+        width: 100%;
+        height: auto;
+    }
+
+    .book__info {
+        width: 100%;
+        text-align: center;
+    }
+
+    .book__author {
+        font-size: 1.3rem;
+
+    }
+
+    .book__title {
+        font-size: 1.5rem;
+    }
+
+    .book__price {
+        margin-top: 1rem;
+        font-size: 1.3rem;
+        font-weight: 400;
+    }
+
+    .book__buttons {
+        width: 100%;
+        position: static;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        font-size: 1.5rem;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    /* Grid */
+
+    .container {
+        padding: 0 10px;
+    }
+
+    /* Main */
+
+    .book {
+        width: 100%;
+    }
+}
+
+@media (max-height: 950px) {
+
+    /* Cart-Menu */
+    .cart-menu {
+        max-height: 50rem;
+    }
+
 }

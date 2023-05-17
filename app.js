@@ -460,7 +460,7 @@ cartMenuElem.addEventListener('click', function(event) {
     let cross = event.target.closest('.cart-menu__cross');
     let item = event.target.closest('.cart-menu__item');
     let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
-    const id = item.dataset.id;
+    const id = item?.dataset.id;
 
         if (!cross) return;
 
