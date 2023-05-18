@@ -302,7 +302,8 @@ function createCartMenu() {
     const cartMenuElem = createElem(body, 'div', 'cart-menu', '');
     const cartMenuInnerElem = createElem(cartMenuElem, 'div', 'cart-menu__inner', '');
     const cartBtnAndAmountOrderElem = createElem(cartMenuElem, 'div', 'cart-menu__inter', '');
-    const cartBtnOrderElem = createElem(cartBtnAndAmountOrderElem, 'button', 'cart-menu__btn', 'Order');
+    const cartBtnOrderElem = createElem(cartBtnAndAmountOrderElem, 'a', 'cart-menu__btn', 'Order');
+    cartBtnOrderElem.setAttribute('href', 'form.html');
     const cartAmountOrderElem = createElem(cartBtnAndAmountOrderElem, 'div', 'cart-menu__amount', '');
 
 

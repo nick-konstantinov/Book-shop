@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="form-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Form-Order</title>
+</head>
+<body>
+    <div class="container">
+        <form action="" class="form" id="formOrder" name="form-order">
+            <h1 class="form__title">Order form</h1>
+            <div class="form__item">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form__item">
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
+            </div>
+            <div class="form__item">
+                <label for="date">Delivery date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form__item">
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="street" placeholder="Enter your street name" required>
+            </div>
+            <div class="form__item">
+                <label for="house-number">House number:</label>
+                <input type="number" id="houseNumber" name="house-number" placeholder="Enter your house number" required>
+            </div>
+            <div class="form__item">
+                <label for="flat-number">Flat number:</label>
+                <input type="text" id="flatNumber" name="flat-number" placeholder="Enter your flat number" required>
+            </div>
+            <div class="form__item">
+                <label for="payment-type">Choose the payment type:</label>
+                <div class="form__payment">
+                    <div class="form__payment-option">
+                        <label for="cash">Cash:</label>
+                        <input type="radio" id="cash" value="cash" name="payment-type">
+                    </div>
+                    <div class="form__payment-option">
+                        <label for="card">Card:</label>
+                        <input type="radio" id="card" value="card" name="payment-type">
+                    </div>
+                </div>
+            </div>
+            <div class="form__item">
+                <label for="gifts">Choose 2 gifts (optional):</label>
+                <div class="form__gifts">
+                    <div class="form__gift-box">
+                        <div class="form__gift-option">
+                            <input type="checkbox" id="pack" value="pack" name="gifts">
+                            <label for="pack">pack as a gift</label>
+                        </div>
+                    </div>
+                    <div class="form__gift-box">
+                        <div class="form__gift-option">
+                            <input type="checkbox" id="postcard" value="postcard" name="gifts">
+                            <label for="postcard">add postcard</label>
+                        </div>
+                    </div>
+                    <div class="form__gift-box">
+                        <div class="form__gift-option">
+                            <input type="checkbox" id="discount" value="discount" name="gifts">
+                            <label for="discount">provide 2% discount to the next time</label>
+                        </div>
+                    </div>
+                    <div class="form__gift-box">
+                        <div class="form__gift-option">
+                            <input type="checkbox" id="pen" value="pen" name="gifts">
+                            <label for="pen">branded pen or pencil</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input class="disabled_btn" type="submit" value="Confirm the order" disabled>
+        </form>
+    </div>
+</body>
+</html>
