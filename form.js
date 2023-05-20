@@ -2,7 +2,7 @@
 
 // Check does it match entered data to pattern attribute regular expression
 function checkValidInput(elem, err) {
-    if (elem.validity.patternMismatch) {
+    if (elem.validity.patternMismatch || elem.value === '' || elem.value === null) {
         elem.classList.add('invalid');
         err.hidden = false;
     }
