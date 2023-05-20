@@ -1,5 +1,7 @@
 "use strict";
 
+const ORDER_STORAGE_NAME = 'order';
+
 (async () => {
 
 // General global variable
@@ -193,6 +195,10 @@ for (let i = 0; i < booksWithId.length; i++) {
     mapBooks.set(i + 1, booksWithId[i]);
 }
 
+// Add to session storage books catalog
+const serializedBooks = JSON.stringify(Object.fromEntries(mapBooks));
+sessionStorage.setItem('books', serializedBooks);
+
 // Draw "modal-info" window
 function drawModalWindow() {
     const catalogElem = document.querySelector('.catalog__shelf');
@@ -283,6 +289,12 @@ if (maskElem) {
 let sumOrder = 0;
 let orderMap = new Map();
 
+// Add to session storage ordered books
+function setOrderToStorage(orderMapArg) {
+    const serializedOrder = JSON.stringify(Object.fromEntries(orderMapArg));
+    sessionStorage.setItem(ORDER_STORAGE_NAME, serializedOrder);
+}
+
 // Add elements to map collection
 function addElemToMap(elem) {
     const id = elem.getAttribute('id');
@@ -295,6 +307,7 @@ function addElemToMap(elem) {
     sumOrder += +elem.dataset.price;
 
     orderMap.set(id, countBooks);
+    setOrderToStorage(orderMap);
 }
 
 // Create cart menu
@@ -337,11 +350,11 @@ function createCartMenuItem(key) {
     const cartMenuAuthorElem = createElem(cartMenuInfoElem, 'h4', 'cart-menu__author', book.author);
 
     let title = '';
-        if (book.title.length > 42) {
-           title = book.title.slice(0, 38) + '...'
-        } else {
-            title = book.title;
-        }
+    if (book.title.length > 42) {
+        title = book.title.slice(0, 38) + '...'
+    } else {
+        title = book.title;
+    }
 
     const cartMenuTitleElem = createElem(cartMenuInfoElem, 'h3', 'cart-menu__title', title);
     const cartMenuPriceElem = createElem(cartMenuInfoElem, 'h4', 'cart-menu__price', 'Price: $' + book.price);
@@ -463,28 +476,29 @@ cartMenuElem.addEventListener('click', function(event) {
     let cartAmountOrderElem = document.querySelector('.cart-menu__amount');
     const id = item?.dataset.id;
 
-        if (!cross) return;
+    if (!cross) return;
 
-        if (!cartMenuElem.contains(cross)) return;
+    if (!cartMenuElem.contains(cross)) return;
 
-        sumOrder -= +item.dataset.price;
+    sumOrder -= +item.dataset.price;
 
-        item.remove();
-        const currentCount = orderMap.get(id);
-        const newCount = currentCount - 1;
-        if (newCount === 0) {
-            orderMap.delete(id);
-        } else {
-            orderMap.set(id, newCount);
-        }
+    item.remove();
+    const currentCount = orderMap.get(id);
+    const newCount = currentCount - 1;
+    if (newCount === 0) {
+        orderMap.delete(id);
+    } else {
+        orderMap.set(id, newCount);
+    }
+    setOrderToStorage(orderMap);
 
-        item = null;
+    item = null;
 
-        changeCartCounter();
-        cartAmountOrderElem.innerHTML = '$' + sumOrder;
-        if (counterCart === 0) {
-            body.style.overflow = 'visible';
-        }
+    changeCartCounter();
+    cartAmountOrderElem.innerHTML = '$' + sumOrder;
+    if (counterCart === 0) {
+        body.style.overflow = 'visible';
+    }
 });
 
 
