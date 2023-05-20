@@ -1,0 +1,371 @@
+/* Standart Reset Styles */
+
+*, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 10px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+p {
+    margin: 0 0 1rem;
+    line-height: 1.6;
+}
+
+body{
+    margin: 0;
+    background-color: #f1f1ef;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Grid */
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
+}
+
+.form__title {
+    width: 40%;
+    margin: 0 auto;
+    margin-bottom: 1.7rem;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #000;
+}
+
+.form__item {
+    position: relative;
+    width: 90%;
+    margin: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    text-align: left;
+}
+
+.form__item:nth-last-child(-n+2) {
+    margin-bottom: 3rem;
+}
+
+.form__item label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form__item input {
+    display: inline-block;
+    width: 100%;
+    margin-left: 1px;
+    padding: 0.8rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="date"] {
+    color: #827d7d;
+}
+
+.form__payment {
+    display: flex;
+    align-items: center;
+}
+
+.form__payment-option {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+    cursor: pointer;
+}
+
+.form__payment-option label[for="cash"], .form__payment-option label[for="card"] {
+    display: inline-block;
+    font-size: 1.7rem;
+    font-weight: 400;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.form__payment-option input[type="radio"] {
+    position: relative;
+    bottom: -2px;
+    display: inline-block;
+    width: auto;
+    margin-left: 0.5rem;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+}
+
+.form__payment {
+    margin-top: 0.7rem;
+}
+
+.form__gifts {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__gift-box {
+    display: flex;
+    align-items: center;
+    width: auto;
+}
+
+.form__gift-option {
+    cursor: pointer;
+}
+
+.form__gift-option input {
+    display: inline-block;
+    position: relative;
+    bottom: -2px;
+    width: auto;
+    cursor: pointer;
+}
+
+.form__gift-option label {
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 1.7rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    margin-bottom: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    color: #000;
+    padding: 0.8rem 1.5rem;
+    background-color: transparent;
+    border: 2px solid #90AFC5;
+    border-radius: 3rem;
+    cursor: pointer;
+}
+
+/* Disabled */
+
+.disabled_btn {
+    color: #827d7d !important;
+    border-color: #8b8686 !important;
+    opacity: 0.3;
+    cursor: default !important;
+}
+
+/* Invalid */
+
+.invalid {
+    border: 2px solid red !important;
+}
+
+/* Error */
+
+.error {
+    position: absolute;
+    bottom: -4.2rem;
+    left: 4px;
+
+    width: 100%;
+    height: 4rem;
+
+    font-size: 1.2rem;
+    color: #8b8686;
+
+}
+
+.error__flat-number {
+    font-size: 1.15rem;
+}
+
+/* Mask */
+
+.mask {
+    width: 100%;
+    height: 100%;
+
+    background: rgba(41, 41, 41, 0.6);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+/* Modal */
+
+.modal {
+    position: relative;
+    background: #FAFAFA;
+    border-radius: 0.9rem;
+    width: 60rem;
+    height: 59rem;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+}
+
+.modal__inner {
+    width: 100%;
+}
+
+.modal__info {
+    padding-left: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-right: 2rem;
+}
+
+.modal__title {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    font-size: 3rem;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    color: #000;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 1px solid #000;
+}
+
+.modal__address, .modal__customer, .modal__date {
+    margin-top: 1rem;
+    font-size: 2rem;
+    line-height: 1.15;
+    letter-spacing: 0.06em;
+    color: #000;
+}
+
+.modal__address span, .modal__customer span, .modal__date span {
+    font-weight: 300;
+    font-size: 1.8rem;
+}
+
+.modal__list-books {
+    display: block;
+    width: 100%;
+    height: 30re;
+    font-size: 2rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: #000;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.modal__list-books span {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 300;
+}
+
+.modal__total-sum {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+
+
+.modal__point {
+    font-family: Georgia, "Gelasio", serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    color: #000;
+    margin-bottom: 1.1rem;
+}
+
+.modal__point::marker {
+    color: #F1CDB3;
+}
+
+.modal__point span {
+    font-size: 1.5rem;
+}
+
+.modal__point span.bold {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.modal__cross {
+    position: absolute;
+    top: -5.15rem;
+    right: -4.2rem;
+
+    width: 5.2rem;
+    height: 5.2rem;
+    border: 0.2rem solid #F1CDB3;
+    border-radius: 50%;
+
+    transition: all ease 0.3s;
+}
+
+.modal__cross:hover {
+    cursor: pointer;
+    background-color: #FDDCC4;
+    border-color: #FDDCC4;
+}
+
+.hover {
+    background-color: #FDDCC4;
+    border-color: #FDDCC4;
+}
+
+.modal__cross::before, .modal__cross::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    border-radius: 2px;
+
+    width: 1.7rem;
+    height: 0.2rem;
+    background-color: #000;
+}
+
+.modal__cross::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modal__cross::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
