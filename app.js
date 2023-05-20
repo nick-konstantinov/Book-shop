@@ -8,7 +8,7 @@ const ORDER_STORAGE_NAME = 'order';
 const body = document.body;
 
 // Get book's collection
-let response = await fetch('../books.json');
+let response = await fetch('./books.json');
 let books = await response.json();
 
 // Add id atributes for books
